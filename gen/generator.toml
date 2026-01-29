@@ -1,0 +1,78 @@
+# NIDAQmx Binding Generator Configuration
+# For use with Clang.jl
+
+[general]
+# Path to output the generated bindings
+output_file_path = "../src/generated/bindings.jl"
+
+# Library name (used in ccall)
+library_name = "libnidaq"
+
+# Use Julia naming conventions
+use_julia_native_enum_type = true
+
+# Print progress during generation
+print_progress = true
+
+# Run post-processing after generation
+run_postprocessing = true
+
+[codegen]
+# Generate function wrappers
+use_ccall_macro = false
+
+# Handle string arguments
+auto_mutability = true
+
+# Use proper Julia types
+use_deterministic_symbol = true
+
+[codegen.macro]
+# Don't generate macro wrappers for now
+skip = true
+
+[codegen.enum]
+# Use @enum for enum types
+use_julia_native_enum_type = true
+
+# Prefix to strip from enum names
+enum_prefix = "DAQmx_Val_"
+
+[codegen.struct]
+# Generate mutable structs for structures that may be modified
+mutable_struct_names = ["CVITime", "CVIAbsoluteTime"]
+
+[codegen.function]
+# Functions to skip (we provide manual implementations)
+skip = [
+    # Error handling (we provide our own)
+    "DAQmxGetErrorString",
+    "DAQmxGetExtendedErrorInfo",
+]
+
+# Argument type overrides
+[[codegen.function.arg_type_overrides]]
+type = "Ptr{Cchar}"
+julia_type = "String"
+ccall_type = "Ptr{Cchar}"
+convert = "pointer"
+
+[typedefs]
+# Custom typedef mappings
+bool32 = "Bool32"
+int32 = "Int32"
+uInt32 = "UInt32"
+int16 = "Int16"
+uInt16 = "UInt16"
+int8 = "Int8"
+uInt8 = "UInt8"
+float32 = "Float32"
+float64 = "Float64"
+int64 = "Int64"
+uInt64 = "UInt64"
+TaskHandle = "Ptr{Cvoid}"
+CalHandle = "UInt32"
+
+[prologue]
+# Include custom prologue
+file = "prologue.jl"
