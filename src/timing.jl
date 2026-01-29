@@ -155,7 +155,7 @@ function configure_digital_start_trigger!(task::Task, source::String;
 
     @check DAQmxCfgDigEdgeStartTrig(
         task.handle,
-        pointer(source),
+        _cstr(source),
         Int32(edge)
     )
 
@@ -181,7 +181,7 @@ function configure_analog_start_trigger!(task::Task, source::String;
 
     @check DAQmxCfgAnlgEdgeStartTrig(
         task.handle,
-        pointer(source),
+        _cstr(source),
         Int32(slope),
         level
     )
@@ -217,7 +217,7 @@ function configure_analog_window_start_trigger!(task::Task, source::String;
 
     @check DAQmxCfgAnlgWindowStartTrig(
         task.handle,
-        pointer(source),
+        _cstr(source),
         when_code,
         window_top,
         window_bottom
@@ -254,7 +254,7 @@ function configure_digital_ref_trigger!(task::Task, source::String;
 
     @check DAQmxCfgDigEdgeRefTrig(
         task.handle,
-        pointer(source),
+        _cstr(source),
         Int32(edge),
         UInt32(pretrigger_samples)
     )
@@ -277,7 +277,7 @@ function configure_analog_ref_trigger!(task::Task, source::String;
 
     @check DAQmxCfgAnlgEdgeRefTrig(
         task.handle,
-        pointer(source),
+        _cstr(source),
         Int32(slope),
         level,
         UInt32(pretrigger_samples)
@@ -307,7 +307,7 @@ Get the sample clock rate for a task.
 """
 function sample_rate(task::Task)
     rate = Ref{Float64}(0.0)
-    @check DAQmxGetSampClkRate(task.handle, rate)
+    @check DAQmxGetSampClkRate(task.handle, Base.unsafe_convert(Ptr{Float64}, rate))
     return rate[]
 end
 
@@ -341,7 +341,7 @@ end
 Set the sample clock source terminal.
 """
 function set_sample_clock_source!(task::Task, source::String)
-    @check DAQmxSetSampClkSrc(task.handle, pointer(source))
+    @check DAQmxSetSampClkSrc(task.handle, _cstr(source))
     return task
 end
 
@@ -352,7 +352,7 @@ Get the number of samples per channel for the task.
 """
 function samples_per_channel(task::Task)
     count = Ref{UInt64}(0)
-    @check DAQmxGetSampQuantSampPerChan(task.handle, count)
+    @check DAQmxGetSampQuantSampPerChan(task.handle, Base.unsafe_convert(Ptr{UInt64}, count))
     return Int(count[])
 end
 
@@ -397,7 +397,7 @@ Get the input buffer size per channel.
 """
 function input_buffer_size(task::Task)
     size = Ref{UInt32}(0)
-    @check DAQmxGetBufInputBufSize(task.handle, size)
+    @check DAQmxGetBufInputBufSize(task.handle, Base.unsafe_convert(Ptr{UInt32}, size))
     return Int(size[])
 end
 
@@ -418,7 +418,7 @@ Get the output buffer size per channel.
 """
 function output_buffer_size(task::Task)
     size = Ref{UInt32}(0)
-    @check DAQmxGetBufOutputBufSize(task.handle, size)
+    @check DAQmxGetBufOutputBufSize(task.handle, Base.unsafe_convert(Ptr{UInt32}, size))
     return Int(size[])
 end
 

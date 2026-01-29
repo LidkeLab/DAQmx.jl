@@ -92,8 +92,8 @@ function _read_analog(task::AITask, ::Type{Int16}, samples_per_channel::Int, tim
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -119,8 +119,8 @@ function _read_analog(task::AITask, ::Type{UInt16}, samples_per_channel::Int, ti
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -146,8 +146,8 @@ function _read_analog(task::AITask, ::Type{Int32}, samples_per_channel::Int, tim
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -173,8 +173,8 @@ function _read_analog(task::AITask, ::Type{UInt32}, samples_per_channel::Int, ti
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -243,8 +243,8 @@ function _read_digital(task::DITask, ::Type{UInt8}, samples_per_channel::Int, ti
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -270,8 +270,8 @@ function _read_digital(task::DITask, ::Type{UInt16}, samples_per_channel::Int, t
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -297,8 +297,8 @@ function _read_digital(task::DITask, ::Type{UInt32}, samples_per_channel::Int, t
         Bool32(fill_mode),
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     actual_samples = samples_read[]
@@ -344,8 +344,8 @@ function Base.read(task::CITask;
         timeout,
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     return data[1:samples_read[]]
@@ -369,8 +369,8 @@ function Base.read(task::CITask, ::Type{Float64};
         timeout,
         pointer(data),
         UInt32(length(data)),
-        samples_read,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_read),
+        Ptr{Bool32}()
     )
 
     return data[1:samples_read[]]
@@ -433,8 +433,8 @@ function Base.write(task::AOTask, data::AbstractVector{Float64};
         timeout,
         Bool32(data_layout),
         pointer(data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -455,8 +455,8 @@ function Base.write(task::AOTask, data::AbstractMatrix{Float64};
         timeout,
         Bool32(data_layout),
         pointer(flat_data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -497,8 +497,8 @@ function Base.write(task::DOTask, data::AbstractVector{UInt8};
         timeout,
         Bool32(data_layout),
         pointer(data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -519,8 +519,8 @@ function Base.write(task::DOTask, data::AbstractMatrix{UInt8};
         timeout,
         Bool32(data_layout),
         pointer(flat_data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -539,8 +539,8 @@ function Base.write(task::DOTask, data::AbstractVector{UInt16};
         timeout,
         Bool32(data_layout),
         pointer(data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -559,8 +559,8 @@ function Base.write(task::DOTask, data::AbstractVector{UInt32};
         timeout,
         Bool32(data_layout),
         pointer(data),
-        samples_written,
-        C_NULL
+        Base.unsafe_convert(Ptr{Int32}, samples_written),
+        Ptr{Bool32}()
     )
 
     return Int(samples_written[])
@@ -589,7 +589,7 @@ Get the number of samples available to read.
 """
 function available_samples(task::Task)
     count = Ref{UInt32}(0)
-    @check DAQmxGetReadAvailSampPerChan(task.handle, count)
+    @check DAQmxGetReadAvailSampPerChan(task.handle, Base.unsafe_convert(Ptr{UInt32}, count))
     return Int(count[])
 end
 
@@ -600,7 +600,7 @@ Get the amount of space available in the output buffer.
 """
 function space_available(task::Task)
     count = Ref{UInt32}(0)
-    @check DAQmxGetWriteSpaceAvail(task.handle, count)
+    @check DAQmxGetWriteSpaceAvail(task.handle, Base.unsafe_convert(Ptr{UInt32}, count))
     return Int(count[])
 end
 
@@ -611,7 +611,7 @@ Get the total number of samples acquired per channel.
 """
 function total_samples_acquired(task::Task)
     count = Ref{UInt64}(0)
-    @check DAQmxGetReadTotalSampPerChanAcquired(task.handle, count)
+    @check DAQmxGetReadTotalSampPerChanAcquired(task.handle, Base.unsafe_convert(Ptr{UInt64}, count))
     return Int(count[])
 end
 
@@ -622,6 +622,6 @@ Get the total number of samples generated per channel.
 """
 function total_samples_generated(task::Task)
     count = Ref{UInt64}(0)
-    @check DAQmxGetWriteTotalSampPerChanGenerated(task.handle, count)
+    @check DAQmxGetWriteTotalSampPerChanGenerated(task.handle, Base.unsafe_convert(Ptr{UInt64}, count))
     return Int(count[])
 end

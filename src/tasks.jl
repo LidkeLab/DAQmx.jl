@@ -102,7 +102,7 @@ Check if the task has completed all operations.
 """
 function is_done(task::Task)
     done_ref = Ref{Bool32}(0)
-    @check DAQmxIsTaskDone(task.handle, done_ref)
+    @check DAQmxIsTaskDone(task.handle, Base.unsafe_convert(Ptr{Bool32}, done_ref))
     return Bool(done_ref[])
 end
 
@@ -162,7 +162,7 @@ Get the number of channels in the task.
 """
 function num_channels(task::Task)
     num_ref = Ref{UInt32}(0)
-    @check DAQmxGetTaskNumChans(task.handle, num_ref)
+    @check DAQmxGetTaskNumChans(task.handle, Base.unsafe_convert(Ptr{UInt32}, num_ref))
     return Int(num_ref[])
 end
 
@@ -173,12 +173,12 @@ Get the name of the task.
 """
 function task_name(task::Task)
     # First call to get buffer size
-    sz = DAQmxGetTaskName(task.handle, C_NULL, UInt32(0))
+    sz = DAQmxGetTaskName(task.handle, NULLSTR, UInt32(0))
     sz <= 0 && return ""
 
-    buffer = Vector{UInt8}(undef, sz)
+    buffer = Vector{Int8}(undef, sz)
     @check DAQmxGetTaskName(task.handle, pointer(buffer), UInt32(sz))
-    return unsafe_string(pointer(buffer))
+    return unsafe_string(Ptr{UInt8}(pointer(buffer)))
 end
 
 """
@@ -191,13 +191,13 @@ Get the names of all channels in the task.
 """
 function channel_names(task::Task)
     # First call to get buffer size
-    sz = DAQmxGetTaskChannels(task.handle, C_NULL, UInt32(0))
+    sz = DAQmxGetTaskChannels(task.handle, NULLSTR, UInt32(0))
     sz <= 0 && return String[]
 
-    buffer = Vector{UInt8}(undef, sz)
+    buffer = Vector{Int8}(undef, sz)
     @check DAQmxGetTaskChannels(task.handle, pointer(buffer), UInt32(sz))
 
-    channels_str = unsafe_string(pointer(buffer))
+    channels_str = unsafe_string(Ptr{UInt8}(pointer(buffer)))
     isempty(channels_str) && return String[]
 
     return String.(strip.(split(channels_str, ",")))
@@ -213,13 +213,13 @@ Get the names of all devices used by the task.
 """
 function device_names(task::Task)
     # First call to get buffer size
-    sz = DAQmxGetTaskDevices(task.handle, C_NULL, UInt32(0))
+    sz = DAQmxGetTaskDevices(task.handle, NULLSTR, UInt32(0))
     sz <= 0 && return String[]
 
-    buffer = Vector{UInt8}(undef, sz)
+    buffer = Vector{Int8}(undef, sz)
     @check DAQmxGetTaskDevices(task.handle, pointer(buffer), UInt32(sz))
 
-    devices_str = unsafe_string(pointer(buffer))
+    devices_str = unsafe_string(Ptr{UInt8}(pointer(buffer)))
     isempty(devices_str) && return String[]
 
     return String.(strip.(split(devices_str, ",")))

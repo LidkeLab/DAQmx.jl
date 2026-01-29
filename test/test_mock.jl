@@ -4,6 +4,7 @@
 # This allows testing of the Julia wrapper code in CI environments.
 
 using Test
+using NIDAQmx
 
 # ============================================================================
 # Mock Infrastructure

@@ -75,7 +75,7 @@ Get the type of a channel (:AI, :AO, :DI, :DO, :CI, :CO).
 """
 function channel_type(task::Task, channel::String)
     val = Ref{Int32}(0)
-    @check DAQmxGetChanType(task.handle, pointer(channel), val)
+    @check DAQmxGetChanType(task.handle, _cstr(channel), val)
 
     chan_type = val[]
     if chan_type == DAQmx_Val_AI
@@ -106,13 +106,13 @@ function measurement_type(task::Task, channel::String)
     val = Ref{Int32}(0)
 
     if ctype === :AI
-        @check DAQmxGetAIMeasType(task.handle, pointer(channel), val)
+        @check DAQmxGetAIMeasType(task.handle, _cstr(channel), val)
     elseif ctype === :AO
-        @check DAQmxGetAOOutputType(task.handle, pointer(channel), val)
+        @check DAQmxGetAOOutputType(task.handle, _cstr(channel), val)
     elseif ctype === :CI
-        @check DAQmxGetCIMeasType(task.handle, pointer(channel), val)
+        @check DAQmxGetCIMeasType(task.handle, _cstr(channel), val)
     elseif ctype === :CO
-        @check DAQmxGetCOOutputType(task.handle, pointer(channel), val)
+        @check DAQmxGetCOOutputType(task.handle, _cstr(channel), val)
     else
         return Int32(0)
     end
@@ -144,7 +144,7 @@ function get_channel_property(task::Task, channel::String, property::Symbol)
     getter = getfield(NIDAQmx, prop_def.getter)
 
     val = Ref{prop_def.value_type}(zero(prop_def.value_type))
-    @check getter(task.handle, pointer(channel), val)
+    @check getter(task.handle, _cstr(channel), val)
     return val[]
 end
 
@@ -171,7 +171,7 @@ function set_channel_property!(task::Task, channel::String, property::Symbol, va
     end
 
     setter = getfield(NIDAQmx, prop_def.setter)
-    @check setter(task.handle, pointer(channel), convert(prop_def.value_type, value))
+    @check setter(task.handle, _cstr(channel), convert(prop_def.value_type, value))
     return nothing
 end
 
