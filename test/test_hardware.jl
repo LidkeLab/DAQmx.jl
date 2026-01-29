@@ -157,9 +157,27 @@ else
             @info "Testing counter input on $ctr"
 
             # Try to create counter task - some devices have limited counter support
+            # Note: USB-6008 only supports Falling edge, not Rising
+            task = nothing
             try
-                # Count edges with simple on-demand reading
-                task = CITask(ctr; method=:count_edges)
+                # First try Rising edge (most devices)
+                task = CITask(ctr; method=:count_edges, edge=Rising)
+            catch e
+                if e isa NIDAQError
+                    # Try Falling edge (USB-6008 requires this)
+                    try
+                        task = CITask(ctr; method=:count_edges, edge=Falling)
+                        @info "Device requires Falling edge for counter input"
+                    catch e2
+                        @info "Counter input not supported on this device: $(e2.message)"
+                        @test_skip "Counter input"
+                    end
+                else
+                    rethrow(e)
+                end
+            end
+
+            if task !== nothing
                 @test task isa CITask
 
                 start!(task)
@@ -170,13 +188,6 @@ else
 
                 stop!(task)
                 clear!(task)
-            catch e
-                if e isa NIDAQError
-                    @info "Counter input not fully supported on this device: $(e.message)"
-                    @test_skip "Counter input"
-                else
-                    rethrow(e)
-                end
             end
         end
     end
