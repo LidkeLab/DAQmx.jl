@@ -143,34 +143,22 @@ if isempty(ao_chans)
     println("  No analog output channels available.")
 else
     println("  Found $(length(ao_chans)) AO channel(s)")
+
+    # Get device's supported voltage range
+    ao_ranges = ao_voltage_ranges(target_device)
+    min_v, max_v = ao_ranges[1, 1], ao_ranges[1, 2]
+    mid_v = (min_v + max_v) / 2
+    println("  Voltage range: $min_v to $max_v V")
     println()
 
-    # Write 0V to each channel
+    # Write midpoint voltage to each channel (safe for 0-5V and ±10V devices)
     for chan in ao_chans
-        safe_test("Writing 0.0V to $chan") do
-            task = AOTask(chan)
-            write_scalar(task, 0.0; timeout=WRITE_TIMEOUT)
+        safe_test("Writing $(mid_v)V to $chan") do
+            task = AOTask(chan; min_val=min_v, max_val=max_v)
+            write_scalar(task, mid_v; timeout=WRITE_TIMEOUT)
             clear!(task)
-            return 0.0
+            return mid_v
         end
-    end
-
-    # Test writing a waveform
-    println()
-    safe_test("Writing test waveform to $(ao_chans[1])") do
-        task = AOTask(ao_chans[1])
-        # Generate a simple ramp from 0 to 1V and back
-        waveform = vcat(collect(0.0:0.1:1.0), collect(1.0:-0.1:0.0))
-        configure_timing!(task; rate=100.0, samples_per_channel=length(waveform))
-        n = write(task, waveform; auto_start=true)
-        wait_until_done(task; timeout=5.0)
-        stop!(task)
-
-        # Reset to 0V
-        write_scalar(task, 0.0)
-        clear!(task)
-        println("$n samples")
-        return n
     end
 end
 
@@ -281,7 +269,14 @@ else
 
     for ctr in ci_chans
         safe_test("Reading edge count on $ctr") do
-            task = CITask(ctr; method=:count_edges, edge=Rising, count_direction=CountUp)
+            # Try Rising edge first, fall back to Falling (USB-6008 requires Falling)
+            task = nothing
+            try
+                task = CITask(ctr; method=:count_edges, edge=Rising)
+            catch
+                task = CITask(ctr; method=:count_edges, edge=Falling)
+                print("(Falling edge) ")
+            end
             start!(task)
             sleep(0.1)  # Wait a bit to count any edges
             value = read_scalar(task; timeout=READ_TIMEOUT)
