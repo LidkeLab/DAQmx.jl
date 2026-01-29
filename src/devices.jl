@@ -249,9 +249,9 @@ function _get_ranges(getter_fn, device_name::String)
     data = Vector{Float64}(undef, sz)
     @check getter_fn(_cstr(device_name), pointer(data), UInt32(sz))
 
-    # Reshape into min/max pairs
+    # Reshape into min/max pairs (collect to get Matrix, not Adjoint)
     n_ranges = div(sz, 2)
-    return reshape(data, (2, n_ranges))'
+    return collect(reshape(data, (2, n_ranges))')
 end
 
 """
