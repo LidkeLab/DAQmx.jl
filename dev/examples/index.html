@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Examples · NIDAQmx.jl</title><meta name="title" content="Examples · NIDAQmx.jl"/><meta property="og:title" content="Examples · NIDAQmx.jl"/><meta property="twitter:title" content="Examples · NIDAQmx.jl"/><meta name="description" content="Documentation for NIDAQmx.jl."/><meta property="og:description" content="Documentation for NIDAQmx.jl."/><meta property="twitter:description" content="Documentation for NIDAQmx.jl."/><meta property="og:url" content="https://LidkeLab.github.io/NIDAQmx.jl/examples/"/><meta property="twitter:url" content="https://LidkeLab.github.io/NIDAQmx.jl/examples/"/><link rel="canonical" href="https://LidkeLab.github.io/NIDAQmx.jl/examples/"/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">NIDAQmx.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#Device-Discovery"><span>Device Discovery</span></a></li><li><a class="tocitem" href="#Analog-Input"><span>Analog Input</span></a></li><li><a class="tocitem" href="#Analog-Output"><span>Analog Output</span></a></li><li><a class="tocitem" href="#Digital-I/O"><span>Digital I/O</span></a></li><li><a class="tocitem" href="#Counter-Input"><span>Counter Input</span></a></li><li><a class="tocitem" href="#Counter-Output"><span>Counter Output</span></a></li><li><a class="tocitem" href="#Triggering"><span>Triggering</span></a></li><li><a class="tocitem" href="#Synchronized-Tasks"><span>Synchronized Tasks</span></a></li></ul></li><li><a class="tocitem" href="../api/">API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/LidkeLab/NIDAQmx.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/LidkeLab/NIDAQmx.jl/blob/main/docs/src/examples.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><h2 id="Device-Discovery"><a class="docs-heading-anchor" href="#Device-Discovery">Device Discovery</a><a id="Device-Discovery-1"></a><a class="docs-heading-anchor-permalink" href="#Device-Discovery" title="Permalink"></a></h2><p>List available devices and query their capabilities:</p><pre><code class="language-julia hljs">using NIDAQmx
+
+# Get all devices
+devs = devices()
+for dev in devs
+    println(&quot;Device: $(dev.name)&quot;)
+    println(&quot;  Product: $(product_type(dev))&quot;)
+    println(&quot;  Serial: $(serial_number(dev))&quot;)
+    println(&quot;  AI Channels: $(ai_channels(dev))&quot;)
+    println(&quot;  AO Channels: $(ao_channels(dev))&quot;)
+    println(&quot;  Voltage Ranges: $(ai_voltage_ranges(dev))&quot;)
+end</code></pre><h2 id="Analog-Input"><a class="docs-heading-anchor" href="#Analog-Input">Analog Input</a><a id="Analog-Input-1"></a><a class="docs-heading-anchor-permalink" href="#Analog-Input" title="Permalink"></a></h2><h3 id="Single-Channel-Finite-Acquisition"><a class="docs-heading-anchor" href="#Single-Channel-Finite-Acquisition">Single Channel Finite Acquisition</a><a id="Single-Channel-Finite-Acquisition-1"></a><a class="docs-heading-anchor-permalink" href="#Single-Channel-Finite-Acquisition" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+# Create task with convenience constructor
+task = AITask(&quot;Dev1/ai0&quot;; terminal_config=RSE)
+
+# Configure timing
+configure_timing!(task;
+    rate=10000.0,
+    samples_per_channel=1000,
+    sample_mode=FiniteSamples
+)
+
+# Acquire data
+start!(task)
+wait_until_done(task)
+data = read(task)
+stop!(task)
+
+# data is a Vector{Float64} with 1000 samples</code></pre><h3 id="Multi-Channel-Acquisition"><a class="docs-heading-anchor" href="#Multi-Channel-Acquisition">Multi-Channel Acquisition</a><a id="Multi-Channel-Acquisition-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Channel-Acquisition" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+# Create empty task and add channels
+task = AITask()
+add_ai_voltage!(task, &quot;Dev1/ai0&quot;; terminal_config=Differential, min_val=-5.0, max_val=5.0)
+add_ai_voltage!(task, &quot;Dev1/ai1&quot;; terminal_config=Differential, min_val=-5.0, max_val=5.0)
+add_ai_voltage!(task, &quot;Dev1/ai2&quot;; terminal_config=Differential, min_val=-5.0, max_val=5.0)
+
+configure_timing!(task; rate=1000.0, samples_per_channel=100)
+start!(task)
+data = read(task)  # 100x3 Matrix{Float64}
+stop!(task)</code></pre><h3 id="Continuous-Acquisition"><a class="docs-heading-anchor" href="#Continuous-Acquisition">Continuous Acquisition</a><a id="Continuous-Acquisition-1"></a><a class="docs-heading-anchor-permalink" href="#Continuous-Acquisition" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AITask(&quot;Dev1/ai0&quot;)
+configure_timing!(task;
+    rate=10000.0,
+    sample_mode=ContinuousSamples,
+    samples_per_channel=10000
+)
+
+start!(task)
+
+# Read in chunks
+for i in 1:10
+    n_available = available_samples(task)
+    if n_available &gt;= 1000
+        data = read(task; samples_per_channel=1000)
+        println(&quot;Read $(length(data)) samples, total acquired: $(total_samples_acquired(task))&quot;)
+    end
+    sleep(0.1)
+end
+
+stop!(task)</code></pre><h3 id="Thermocouple-Measurement"><a class="docs-heading-anchor" href="#Thermocouple-Measurement">Thermocouple Measurement</a><a id="Thermocouple-Measurement-1"></a><a class="docs-heading-anchor-permalink" href="#Thermocouple-Measurement" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AITask()
+add_ai_thermocouple!(task, &quot;Dev1/ai0&quot;;
+    min_val=0.0,
+    max_val=200.0,
+    units=:DegC,
+    thermocouple_type=:K_Type,
+    cjc_source=:BuiltIn
+)
+
+start!(task)
+temp = read_scalar(task)
+println(&quot;Temperature: $temp C&quot;)
+stop!(task)</code></pre><h2 id="Analog-Output"><a class="docs-heading-anchor" href="#Analog-Output">Analog Output</a><a id="Analog-Output-1"></a><a class="docs-heading-anchor-permalink" href="#Analog-Output" title="Permalink"></a></h2><h3 id="Single-Point-Output"><a class="docs-heading-anchor" href="#Single-Point-Output">Single Point Output</a><a id="Single-Point-Output-1"></a><a class="docs-heading-anchor-permalink" href="#Single-Point-Output" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AOTask(&quot;Dev1/ao0&quot;; min_val=0.0, max_val=5.0)
+write_scalar(task, 2.5)  # Output 2.5V</code></pre><h3 id="Waveform-Output"><a class="docs-heading-anchor" href="#Waveform-Output">Waveform Output</a><a id="Waveform-Output-1"></a><a class="docs-heading-anchor-permalink" href="#Waveform-Output" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AOTask(&quot;Dev1/ao0&quot;)
+configure_timing!(task;
+    rate=10000.0,
+    samples_per_channel=10000,
+    sample_mode=FiniteSamples
+)
+
+# Generate sine wave: 100 Hz, 5V amplitude
+t = range(0, 1, length=10000)
+waveform = 5.0 .* sin.(2π .* 100 .* t)
+
+write(task, waveform; auto_start=false)
+start!(task)
+wait_until_done(task)
+stop!(task)</code></pre><h3 id="Continuous-Waveform-Generation"><a class="docs-heading-anchor" href="#Continuous-Waveform-Generation">Continuous Waveform Generation</a><a id="Continuous-Waveform-Generation-1"></a><a class="docs-heading-anchor-permalink" href="#Continuous-Waveform-Generation" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AOTask(&quot;Dev1/ao0&quot;)
+configure_timing!(task;
+    rate=100000.0,
+    sample_mode=ContinuousSamples,
+    samples_per_channel=100000
+)
+
+# Pre-fill buffer
+t = range(0, 1, length=100000)
+waveform = 5.0 .* sin.(2π .* 1000 .* t)
+
+write(task, waveform; auto_start=false)
+start!(task)
+
+# Task generates continuously until stopped
+sleep(5.0)
+stop!(task)</code></pre><h2 id="Digital-I/O"><a class="docs-heading-anchor" href="#Digital-I/O">Digital I/O</a><a id="Digital-I/O-1"></a><a class="docs-heading-anchor-permalink" href="#Digital-I/O" title="Permalink"></a></h2><h3 id="Reading-Digital-Lines"><a class="docs-heading-anchor" href="#Reading-Digital-Lines">Reading Digital Lines</a><a id="Reading-Digital-Lines-1"></a><a class="docs-heading-anchor-permalink" href="#Reading-Digital-Lines" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+# Read 8 digital lines as a byte
+task = DITask(&quot;Dev1/port0/line0:7&quot;; line_grouping=ChannelForAllLines)
+data = read(task, UInt8)
+println(&quot;Port value: 0x$(string(data[1], base=16))&quot;)</code></pre><h3 id="Writing-Digital-Lines"><a class="docs-heading-anchor" href="#Writing-Digital-Lines">Writing Digital Lines</a><a id="Writing-Digital-Lines-1"></a><a class="docs-heading-anchor-permalink" href="#Writing-Digital-Lines" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = DOTask(&quot;Dev1/port0/line0:7&quot;; line_grouping=ChannelForAllLines)
+write(task, UInt8[0xFF])  # All lines high
+sleep(1.0)
+write(task, UInt8[0x00])  # All lines low</code></pre><h3 id="Change-Detection"><a class="docs-heading-anchor" href="#Change-Detection">Change Detection</a><a id="Change-Detection-1"></a><a class="docs-heading-anchor-permalink" href="#Change-Detection" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = DITask(&quot;Dev1/port0/line0:3&quot;)
+configure_change_detection_timing!(task;
+    rising_edge_channels=&quot;Dev1/port0/line0:3&quot;,
+    falling_edge_channels=&quot;Dev1/port0/line0:3&quot;,
+    sample_mode=FiniteSamples,
+    samples_per_channel=100
+)
+
+start!(task)
+# Task generates samples when lines change state
+data = read(task; samples_per_channel=100, timeout=30.0)
+stop!(task)</code></pre><h2 id="Counter-Input"><a class="docs-heading-anchor" href="#Counter-Input">Counter Input</a><a id="Counter-Input-1"></a><a class="docs-heading-anchor-permalink" href="#Counter-Input" title="Permalink"></a></h2><h3 id="Edge-Counting"><a class="docs-heading-anchor" href="#Edge-Counting">Edge Counting</a><a id="Edge-Counting-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-Counting" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = CITask(&quot;Dev1/ctr0&quot;; method=:count_edges, edge=Rising, count_direction=CountUp)
+configure_implicit_timing!(task; sample_mode=ContinuousSamples)
+
+start!(task)
+sleep(1.0)
+count = read_scalar(task)
+println(&quot;Edges counted: $count&quot;)
+stop!(task)</code></pre><h3 id="Frequency-Measurement"><a class="docs-heading-anchor" href="#Frequency-Measurement">Frequency Measurement</a><a id="Frequency-Measurement-1"></a><a class="docs-heading-anchor-permalink" href="#Frequency-Measurement" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = CITask(&quot;Dev1/ctr0&quot;;
+    method=:freq,
+    min_val=1.0,
+    max_val=1000000.0,
+    meas_method=:LowFreq1Ctr
+)
+
+configure_implicit_timing!(task; sample_mode=FiniteSamples, samples_per_channel=10)
+start!(task)
+freqs = read(task, Float64; samples_per_channel=10)
+println(&quot;Measured frequencies: $freqs Hz&quot;)
+stop!(task)</code></pre><h3 id="Angular-Encoder"><a class="docs-heading-anchor" href="#Angular-Encoder">Angular Encoder</a><a id="Angular-Encoder-1"></a><a class="docs-heading-anchor-permalink" href="#Angular-Encoder" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = CITask(&quot;Dev1/ctr0&quot;;
+    method=:ang_encoder,
+    decoding_type=EncoderX4,
+    pulses_per_rev=UInt32(1024),
+    z_idx_enable=true,
+    z_idx_phase=AHighBHigh,
+    units=:Degrees
+)
+
+configure_implicit_timing!(task; sample_mode=ContinuousSamples)
+start!(task)
+
+for _ in 1:10
+    angle = read_scalar(task)
+    println(&quot;Angle: $angle degrees&quot;)
+    sleep(0.1)
+end
+
+stop!(task)</code></pre><h2 id="Counter-Output"><a class="docs-heading-anchor" href="#Counter-Output">Counter Output</a><a id="Counter-Output-1"></a><a class="docs-heading-anchor-permalink" href="#Counter-Output" title="Permalink"></a></h2><h3 id="Pulse-Generation"><a class="docs-heading-anchor" href="#Pulse-Generation">Pulse Generation</a><a id="Pulse-Generation-1"></a><a class="docs-heading-anchor-permalink" href="#Pulse-Generation" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+# 1 kHz square wave, 50% duty cycle
+task = COTask(&quot;Dev1/ctr0&quot;; method=:pulse_freq, freq=1000.0, duty_cycle=0.5)
+configure_implicit_timing!(task; sample_mode=ContinuousSamples)
+
+start!(task)
+sleep(5.0)  # Generate for 5 seconds
+stop!(task)</code></pre><h3 id="Finite-Pulse-Train"><a class="docs-heading-anchor" href="#Finite-Pulse-Train">Finite Pulse Train</a><a id="Finite-Pulse-Train-1"></a><a class="docs-heading-anchor-permalink" href="#Finite-Pulse-Train" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = COTask(&quot;Dev1/ctr0&quot;; method=:pulse_freq, freq=100.0, duty_cycle=0.5)
+configure_implicit_timing!(task; sample_mode=FiniteSamples, samples_per_channel=10)
+
+start!(task)
+wait_until_done(task)  # Wait for 10 pulses
+stop!(task)</code></pre><h2 id="Triggering"><a class="docs-heading-anchor" href="#Triggering">Triggering</a><a id="Triggering-1"></a><a class="docs-heading-anchor-permalink" href="#Triggering" title="Permalink"></a></h2><h3 id="Digital-Start-Trigger"><a class="docs-heading-anchor" href="#Digital-Start-Trigger">Digital Start Trigger</a><a id="Digital-Start-Trigger-1"></a><a class="docs-heading-anchor-permalink" href="#Digital-Start-Trigger" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AITask(&quot;Dev1/ai0&quot;)
+configure_timing!(task; rate=10000.0, samples_per_channel=1000)
+configure_digital_start_trigger!(task, &quot;/Dev1/PFI0&quot;; edge=Rising)
+
+start!(task)  # Task waits for trigger
+println(&quot;Waiting for trigger on PFI0...&quot;)
+wait_until_done(task; timeout=30.0)
+data = read(task)
+stop!(task)</code></pre><h3 id="Analog-Start-Trigger"><a class="docs-heading-anchor" href="#Analog-Start-Trigger">Analog Start Trigger</a><a id="Analog-Start-Trigger-1"></a><a class="docs-heading-anchor-permalink" href="#Analog-Start-Trigger" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AITask(&quot;Dev1/ai0:1&quot;)
+configure_timing!(task; rate=10000.0, samples_per_channel=1000)
+
+# Trigger when ai0 crosses 1.0V rising
+configure_analog_start_trigger!(task, &quot;Dev1/ai0&quot;; slope=RisingSlope, level=1.0)
+
+start!(task)
+wait_until_done(task; timeout=30.0)
+data = read(task)
+stop!(task)</code></pre><h3 id="Reference-Trigger-(Pre/Post-Trigger)"><a class="docs-heading-anchor" href="#Reference-Trigger-(Pre/Post-Trigger)">Reference Trigger (Pre/Post Trigger)</a><a id="Reference-Trigger-(Pre/Post-Trigger)-1"></a><a class="docs-heading-anchor-permalink" href="#Reference-Trigger-(Pre/Post-Trigger)" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+task = AITask(&quot;Dev1/ai0&quot;)
+configure_timing!(task; rate=10000.0, samples_per_channel=1000)
+
+# Capture 100 samples before and 900 after trigger
+configure_digital_ref_trigger!(task, &quot;/Dev1/PFI0&quot;;
+    edge=Rising,
+    pretrigger_samples=100
+)
+
+start!(task)
+wait_until_done(task)
+data = read(task)  # Contains pre and post trigger data
+stop!(task)</code></pre><h2 id="Synchronized-Tasks"><a class="docs-heading-anchor" href="#Synchronized-Tasks">Synchronized Tasks</a><a id="Synchronized-Tasks-1"></a><a class="docs-heading-anchor-permalink" href="#Synchronized-Tasks" title="Permalink"></a></h2><h3 id="Multi-Task-Synchronization"><a class="docs-heading-anchor" href="#Multi-Task-Synchronization">Multi-Task Synchronization</a><a id="Multi-Task-Synchronization-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Task-Synchronization" title="Permalink"></a></h3><pre><code class="language-julia hljs">using NIDAQmx
+
+# Create AI and AO tasks
+ai_task = AITask(&quot;Dev1/ai0&quot;)
+ao_task = AOTask(&quot;Dev1/ao0&quot;)
+
+# Configure both with same timing
+configure_timing!(ai_task; rate=10000.0, samples_per_channel=1000, source=&quot;/Dev1/ao/SampleClock&quot;)
+configure_timing!(ao_task; rate=10000.0, samples_per_channel=1000)
+
+# Generate waveform
+waveform = sin.(2π .* (0:999) ./ 1000)
+write(ao_task, waveform; auto_start=false)
+
+# Start both (AI first since it&#39;s slave)
+start!(ai_task)
+start!(ao_task)
+
+wait_until_done(ao_task)
+data = read(ai_task)
+
+stop!(ai_task)
+stop!(ao_task)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Friday 30 January 2026 03:31">Friday 30 January 2026</span>. Using Julia version 1.12.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
