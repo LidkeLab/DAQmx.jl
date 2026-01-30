@@ -1,6 +1,6 @@
-# NIDAQmx binding generator using Clang.jl
+# DAQmx binding generator using Clang.jl
 #
-# This script generates Julia bindings from the NIDAQmx C header file.
+# This script generates Julia bindings from the DAQmx C header file.
 # The generated bindings are committed to the repository and are not
 # regenerated at build time.
 #
@@ -10,7 +10,7 @@
 #   3. Run: julia --project=. generator.jl
 #
 # Requirements:
-#   - NIDAQmx header file (NIDAQmx.h)
+#   - DAQmx header file (DAQmx.h)
 #   - Clang.jl v0.16+
 
 using Clang.Generators
@@ -21,7 +21,7 @@ cd(@__DIR__)
 # Load configuration
 options = load_options(joinpath(@__DIR__, "generator.toml"))
 
-# Get include directories for NIDAQmx
+# Get include directories for DAQmx
 # On Windows, this is typically in the NI installation directory
 include_dir = if Sys.iswindows()
     # Default NI-DAQmx installation path
@@ -41,11 +41,11 @@ if Sys.iswindows()
 end
 
 # Header file to process
-headers = [joinpath(include_dir, "NIDAQmx.h")]
+headers = [joinpath(include_dir, "DAQmx.h")]
 
 # Check if header exists
 if !isfile(headers[1])
-    @error "NIDAQmx.h not found at $(headers[1])"
+    @error "DAQmx.h not found at $(headers[1])"
     @info "Please update the include_dir path in this script or generator.toml"
     exit(1)
 end

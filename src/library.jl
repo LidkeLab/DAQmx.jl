@@ -14,29 +14,29 @@ else
 end
 
 """
-    NIDAQmxVersion
+    DAQmxVersion
 
 Holds the version information for the NIDAQmx driver.
 """
-struct NIDAQmxVersion
+struct DAQmxVersion
     major::UInt32
     minor::UInt32
     update::UInt32
 end
 
-function Base.show(io::IO, v::NIDAQmxVersion)
-    print(io, "NIDAQmx v$(v.major).$(v.minor).$(v.update)")
+function Base.show(io::IO, v::DAQmxVersion)
+    print(io, "NI-DAQmx v$(v.major).$(v.minor).$(v.update)")
 end
 
-Base.VersionNumber(v::NIDAQmxVersion) = VersionNumber(v.major, v.minor, v.update)
+Base.VersionNumber(v::DAQmxVersion) = VersionNumber(v.major, v.minor, v.update)
 
 """
-    library_version() -> NIDAQmxVersion
+    library_version() -> DAQmxVersion
 
 Query the installed NIDAQmx driver version.
 
 # Returns
-- `NIDAQmxVersion`: The version of the installed NIDAQmx driver.
+- `DAQmxVersion`: The version of the installed NIDAQmx driver.
 
 # Throws
 - `NIDAQError`: If the version cannot be determined.
@@ -59,7 +59,7 @@ function library_version()
     @check DAQmxGetSysNIDAQMinorVersion(Base.unsafe_convert(Ptr{UInt32}, minor))
     @check DAQmxGetSysNIDAQUpdateVersion(Base.unsafe_convert(Ptr{UInt32}, update))
 
-    NIDAQmxVersion(major[], minor[], update[])
+    DAQmxVersion(major[], minor[], update[])
 end
 
 """
@@ -82,10 +82,10 @@ function is_library_available()
 end
 
 # Version information cached at module load time (if available)
-const _cached_version = Ref{Union{Nothing, NIDAQmxVersion}}(nothing)
+const _cached_version = Ref{Union{Nothing, DAQmxVersion}}(nothing)
 
 """
-    cached_library_version() -> Union{Nothing, NIDAQmxVersion}
+    cached_library_version() -> Union{Nothing, DAQmxVersion}
 
 Get the cached library version. Returns `nothing` if the library is not available.
 This is populated at module load time.

@@ -5,7 +5,7 @@
 using Pkg
 Pkg.activate(joinpath(@__DIR__, "..", ".."))
 
-using NIDAQmx
+using DAQmx
 
 println("=" ^ 60)
 println("NI-DAQmx Device Discovery")

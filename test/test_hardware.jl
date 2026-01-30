@@ -1,15 +1,15 @@
-# Hardware tests for NIDAQmx.jl
+# Hardware tests for DAQmx.jl
 # These tests require NI-DAQmx hardware to be available
 
 using Test
-using NIDAQmx
+using DAQmx
 
 @testset "Library Version" begin
     v = library_version()
-    @test v isa NIDAQmxVersion
+    @test v isa DAQmxVersion
     @test v.major >= 0
     @test v.minor >= 0
-    @info "NIDAQmx version: $v"
+    @info "DAQmx version: $v"
 end
 
 @testset "Device Detection" begin
@@ -163,7 +163,7 @@ else
                 # First try Rising edge (most devices)
                 task = CITask(ctr; method=:count_edges, edge=Rising)
             catch e
-                if e isa NIDAQError
+                if e isa DAQmxError
                     # Try Falling edge (USB-6008 requires this)
                     try
                         task = CITask(ctr; method=:count_edges, edge=Falling)

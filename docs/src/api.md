@@ -1,7 +1,7 @@
 # API Reference
 
 ```@meta
-CurrentModule = NIDAQmx
+CurrentModule = DAQmx
 ```
 
 ```@index
@@ -197,7 +197,7 @@ get_all_channel_properties
 ## Library Information
 
 ```@docs
-NIDAQmxVersion
+DAQmxVersion
 library_version
 cached_library_version
 is_library_available

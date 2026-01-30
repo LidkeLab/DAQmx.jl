@@ -1,4 +1,4 @@
-# Generator project for NIDAQmx bindings
+# Generator project for DAQmx bindings
 # This is separate from the main package and is only used by maintainers
 # to regenerate bindings when the NI-DAQmx version changes.
 

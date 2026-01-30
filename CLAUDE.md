@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NIDAQmx.jl is a Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe access to NI data acquisition hardware. The package uses parametric types for tasks and Julia enums instead of raw constants.
+DAQmx.jl is a Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe access to NI data acquisition hardware. The package uses parametric types for tasks and Julia enums instead of raw constants.
 
 ## Development Commands
 
@@ -15,10 +15,13 @@ julia --project -e 'using Pkg; Pkg.test()'
 # Run only mock tests (no hardware required)
 julia --project test/test_mock.jl
 
+# Run only hardware tests (requires NI-DAQmx library and hardware)
+julia --project test/test_hardware.jl
+
 # Build documentation
 julia --project=docs docs/make.jl
 
-# Regenerate bindings from NIDAQmx.h (requires Clang.jl and NI-DAQmx SDK)
+# Regenerate bindings from DAQmx.h (requires Clang.jl and NI-DAQmx SDK)
 julia --project=gen gen/generator.jl
 ```
 
@@ -32,7 +35,7 @@ Task{K<:TaskKind} where K in {AnalogInputKind, AnalogOutputKind, DigitalInputKin
 Type aliases: `AITask`, `AOTask`, `DITask`, `DOTask`, `CITask`, `COTask`
 
 ### Source Organization
-- `src/generated/` - Auto-generated from NIDAQmx.h via Clang.jl (types.jl, constants.jl, functions.jl)
+- `src/generated/` - Auto-generated from DAQmx.h via Clang.jl (types.jl, constants.jl, functions.jl)
 - `src/library.jl` - Library loading and version detection
 - `src/errors.jl` - Error handling with `@check` macro that wraps all DAQmx calls
 - `src/types.jl` - Task types, channel types, and Julia enums (TerminalConfig, Edge, SampleMode, etc.)
@@ -48,12 +51,15 @@ Type aliases: `AITask`, `AOTask`, `DITask`, `DOTask`, `CITask`, `COTask`
 - **Task finalizers**: Tasks register finalizers to auto-cleanup handles via `DAQmxClearTask`
 - **Channel functions return task**: Functions like `add_ai_voltage!` return the task for method chaining
 - **Library availability**: `is_library_available()` checks if NI-DAQmx is installed; tests and code paths adapt accordingly
+- **Convenience constructors**: Task types have convenience constructors that create task + add channel in one call: `AITask("Dev1/ai0")`, `AOTask("Dev1/ao0")`, `DITask("Dev1/port0/line0")`, `CITask("Dev1/ctr0"; method=:count_edges)`
 
 ### Generated Bindings
 The `gen/` directory contains Clang.jl configuration. Bindings are pre-generated and committed; regeneration requires:
 1. NI-DAQmx SDK installed with header file
 2. Update paths in `gen/generator.toml` if needed
 3. Run `julia --project=gen gen/generator.jl`
+
+**Note on Ref/Ptr types**: Generated functions use `Ref{T}` for output parameters but the ccall uses `Ptr{T}`. When calling these functions, pass `Ref` values which Julia automatically converts to pointers. For `Ptr{TaskHandle}` specifically, use `Base.unsafe_convert(Ptr{TaskHandle}, handle_ref)`.
 
 ### Testing Strategy
 - `test/test_mock.jl` - Tests type definitions, enums, error handling, and API patterns without hardware

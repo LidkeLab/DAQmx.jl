@@ -1,4 +1,4 @@
-# NIDAQmx Binding Generator Configuration
+# DAQmx Binding Generator Configuration
 # For use with Clang.jl
 
 [general]

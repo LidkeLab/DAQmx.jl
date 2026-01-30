@@ -6,40 +6,40 @@ _cstr(s::String) = Ptr{Cchar}(pointer(s))
 const NULLSTR = Ptr{Cchar}()
 
 """
-    NIDAQError <: Exception
+    DAQmxError <: Exception
 
-Exception thrown when a NIDAQmx function returns a negative error code.
+Exception thrown when a NI-DAQmx function returns a negative error code.
 
 # Fields
-- `code::Int32`: The NIDAQmx error code (negative value).
-- `message::String`: The human-readable error message from NIDAQmx.
+- `code::Int32`: The NI-DAQmx error code (negative value).
+- `message::String`: The human-readable error message from NI-DAQmx.
 """
-struct NIDAQError <: Exception
+struct DAQmxError <: Exception
     code::Int32
     message::String
 end
 
-function Base.showerror(io::IO, e::NIDAQError)
-    print(io, "NIDAQError (", e.code, "): ", e.message)
+function Base.showerror(io::IO, e::DAQmxError)
+    print(io, "DAQmxError (", e.code, "): ", e.message)
 end
 
 """
-    NIDAQWarning
+    DAQmxWarning
 
-Represents a warning from NIDAQmx (positive return code).
+Represents a warning from NI-DAQmx (positive return code).
 Warnings are logged but do not throw exceptions.
 
 # Fields
-- `code::Int32`: The NIDAQmx warning code (positive value).
-- `message::String`: The human-readable warning message from NIDAQmx.
+- `code::Int32`: The NI-DAQmx warning code (positive value).
+- `message::String`: The human-readable warning message from NI-DAQmx.
 """
-struct NIDAQWarning
+struct DAQmxWarning
     code::Int32
     message::String
 end
 
-function Base.show(io::IO, w::NIDAQWarning)
-    print(io, "NIDAQWarning (", w.code, "): ", w.message)
+function Base.show(io::IO, w::DAQmxWarning)
+    print(io, "DAQmxWarning (", w.code, "): ", w.message)
 end
 
 """
@@ -92,7 +92,7 @@ Check a NIDAQmx return code and handle errors/warnings appropriately.
 - `code::Int32`: The return code from a NIDAQmx function.
 
 # Throws
-- `NIDAQError`: If `code < 0`.
+- `DAQmxError`: If `code < 0`.
 """
 function check_error(code::Int32)
     code == 0 && return nothing
@@ -101,16 +101,16 @@ function check_error(code::Int32)
     message = try
         get_error_message(code)
     catch
-        "NIDAQmx error (code: $code)"
+        "NI-DAQmx error (code: $code)"
     end
 
     if code > 0
         # Warning - log and continue
-        @warn "NIDAQmx warning" code message
+        @warn "NI-DAQmx warning" code message
         return nothing
     else
         # Error - throw exception
-        throw(NIDAQError(code, message))
+        throw(DAQmxError(code, message))
     end
 end
 

@@ -1,13 +1,13 @@
 using Test
 
 # Run mock tests first (these don't require hardware)
-@testset "NIDAQmx.jl Tests" begin
+@testset "DAQmx.jl Tests" begin
     @testset "Mock Tests (No Hardware)" begin
         include("test_mock.jl")
     end
 
     # Hardware tests only run if NI-DAQmx is available and hardware is detected
-    using NIDAQmx
+    using DAQmx
 
     if is_library_available()
         @testset "Hardware Tests" begin

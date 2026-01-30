@@ -1,14 +1,14 @@
-using NIDAQmx
+using DAQmx
 using Documenter
 
-DocMeta.setdocmeta!(NIDAQmx, :DocTestSetup, :(using NIDAQmx); recursive=true)
+DocMeta.setdocmeta!(DAQmx, :DocTestSetup, :(using DAQmx); recursive=true)
 
 makedocs(;
-    modules=[NIDAQmx],
+    modules=[DAQmx],
     authors="klidke@unm.edu",
-    sitename="NIDAQmx.jl",
+    sitename="DAQmx.jl",
     format=Documenter.HTML(;
-        canonical="https://LidkeLab.github.io/NIDAQmx.jl",
+        canonical="https://LidkeLab.github.io/DAQmx.jl",
         edit_link="main",
         assets=String[],
         prettyurls=get(ENV, "CI", "false") == "true",
@@ -22,6 +22,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/LidkeLab/NIDAQmx.jl",
+    repo="github.com/LidkeLab/DAQmx.jl",
     devbranch="main",
 )

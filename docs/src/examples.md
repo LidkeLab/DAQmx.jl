@@ -1,7 +1,7 @@
 # Examples
 
 ```@meta
-CurrentModule = NIDAQmx
+CurrentModule = DAQmx
 ```
 
 ## Device Discovery
@@ -9,7 +9,7 @@ CurrentModule = NIDAQmx
 List available devices and query their capabilities:
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Get all devices
 devs = devices()
@@ -28,7 +28,7 @@ end
 ### Single Channel Finite Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Create task with convenience constructor
 task = AITask("Dev1/ai0"; terminal_config=RSE)
@@ -52,7 +52,7 @@ stop!(task)
 ### Multi-Channel Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Create empty task and add channels
 task = AITask()
@@ -69,7 +69,7 @@ stop!(task)
 ### Continuous Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask("Dev1/ai0")
 configure_timing!(task;
@@ -96,7 +96,7 @@ stop!(task)
 ### Thermocouple Measurement
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask()
 add_ai_thermocouple!(task, "Dev1/ai0";
@@ -118,7 +118,7 @@ stop!(task)
 ### Single Point Output
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AOTask("Dev1/ao0"; min_val=0.0, max_val=5.0)
 write_scalar(task, 2.5)  # Output 2.5V
@@ -127,7 +127,7 @@ write_scalar(task, 2.5)  # Output 2.5V
 ### Waveform Output
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AOTask("Dev1/ao0")
 configure_timing!(task;
@@ -149,7 +149,7 @@ stop!(task)
 ### Continuous Waveform Generation
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AOTask("Dev1/ao0")
 configure_timing!(task;
@@ -175,7 +175,7 @@ stop!(task)
 ### Reading Digital Lines
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Read 8 digital lines as a byte
 task = DITask("Dev1/port0/line0:7"; line_grouping=ChannelForAllLines)
@@ -186,7 +186,7 @@ println("Port value: 0x$(string(data[1], base=16))")
 ### Writing Digital Lines
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = DOTask("Dev1/port0/line0:7"; line_grouping=ChannelForAllLines)
 write(task, UInt8[0xFF])  # All lines high
@@ -197,7 +197,7 @@ write(task, UInt8[0x00])  # All lines low
 ### Change Detection
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = DITask("Dev1/port0/line0:3")
 configure_change_detection_timing!(task;
@@ -218,7 +218,7 @@ stop!(task)
 ### Edge Counting
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = CITask("Dev1/ctr0"; method=:count_edges, edge=Rising, count_direction=CountUp)
 configure_implicit_timing!(task; sample_mode=ContinuousSamples)
@@ -233,7 +233,7 @@ stop!(task)
 ### Frequency Measurement
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = CITask("Dev1/ctr0";
     method=:freq,
@@ -252,7 +252,7 @@ stop!(task)
 ### Angular Encoder
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = CITask("Dev1/ctr0";
     method=:ang_encoder,
@@ -280,7 +280,7 @@ stop!(task)
 ### Pulse Generation
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # 1 kHz square wave, 50% duty cycle
 task = COTask("Dev1/ctr0"; method=:pulse_freq, freq=1000.0, duty_cycle=0.5)
@@ -294,7 +294,7 @@ stop!(task)
 ### Finite Pulse Train
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = COTask("Dev1/ctr0"; method=:pulse_freq, freq=100.0, duty_cycle=0.5)
 configure_implicit_timing!(task; sample_mode=FiniteSamples, samples_per_channel=10)
@@ -309,7 +309,7 @@ stop!(task)
 ### Digital Start Trigger
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask("Dev1/ai0")
 configure_timing!(task; rate=10000.0, samples_per_channel=1000)
@@ -325,7 +325,7 @@ stop!(task)
 ### Analog Start Trigger
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask("Dev1/ai0:1")
 configure_timing!(task; rate=10000.0, samples_per_channel=1000)
@@ -342,7 +342,7 @@ stop!(task)
 ### Reference Trigger (Pre/Post Trigger)
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask("Dev1/ai0")
 configure_timing!(task; rate=10000.0, samples_per_channel=1000)
@@ -364,7 +364,7 @@ stop!(task)
 ### Multi-Task Synchronization
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Create AI and AO tasks
 ai_task = AITask("Dev1/ai0")

@@ -1,4 +1,4 @@
-# NIDAQmx.jl API Reference
+# DAQmx.jl API Reference
 
 Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe access to NI data acquisition hardware.
 
@@ -10,7 +10,7 @@ Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe acce
 
 ## Key Concepts
 
-NIDAQmx.jl uses parametric task types (`Task{K}`) where `K` indicates the task kind (analog input, digital output, etc.). This enables type-safe dispatch and compile-time guarantees about valid operations. Tasks automatically clean up handles via finalizers. Julia enums replace raw DAQmx constants for terminal configuration, edges, and sample modes.
+DAQmx.jl uses parametric task types (`Task{K}`) where `K` indicates the task kind (analog input, digital output, etc.). This enables type-safe dispatch and compile-time guarantees about valid operations. Tasks automatically clean up handles via finalizers. Julia enums replace raw DAQmx constants for terminal configuration, edges, and sample modes.
 
 ## Types
 
@@ -20,10 +20,10 @@ NIDAQmx.jl uses parametric task types (`Task{K}`) where `K` indicates the task k
 Task{K<:TaskKind}
 ```
 
-A NIDAQmx task parameterized by kind for type-safe dispatch.
+A DAQmx task parameterized by kind for type-safe dispatch.
 
 **Fields:**
-- `handle::TaskHandle`: The underlying NIDAQmx task handle
+- `handle::TaskHandle`: The underlying DAQmx task handle
 - `name::String`: The name of the task
 
 **Type Aliases:**
@@ -334,15 +334,15 @@ get_all_channel_properties(task, channel_name) -> Dict
 ### Library Information
 
 ```julia
-library_version() -> NIDAQmxVersion
-cached_library_version() -> Union{NIDAQmxVersion, Nothing}
+library_version() -> DAQmxVersion
+cached_library_version() -> Union{DAQmxVersion, Nothing}
 is_library_available() -> Bool
 ```
 
 ### Error Handling
 
 ```julia
-check_error(code)                      # Throws NIDAQError for negative codes
+check_error(code)                      # Throws DAQmxError for negative codes
 get_error_message(code) -> String
 get_extended_error_info() -> String
 ```
@@ -352,7 +352,7 @@ get_extended_error_info() -> String
 ### Analog Input Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Create task and configure
 task = AITask("Dev1/ai0"; terminal_config=RSE)
@@ -368,7 +368,7 @@ stop!(task)
 ### Continuous Analog Output
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AOTask("Dev1/ao0")
 configure_timing!(task; rate=10000.0, sample_mode=ContinuousSamples, samples_per_channel=10000)
@@ -386,7 +386,7 @@ stop!(task)
 ### Digital I/O
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # Read digital port
 di_task = DITask("Dev1/port0")
@@ -400,7 +400,7 @@ write(do_task, UInt8[0xFF])
 ### Counter Input (Edge Counting)
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = CITask("Dev1/ctr0"; method=:count_edges, edge=Rising)
 configure_implicit_timing!(task; sample_mode=ContinuousSamples)
@@ -412,7 +412,7 @@ stop!(task)
 ### Triggered Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask("Dev1/ai0")
 configure_timing!(task; rate=10000.0, samples_per_channel=1000)
@@ -427,7 +427,7 @@ stop!(task)
 ### Multi-Channel Acquisition
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 task = AITask()
 add_ai_voltage!(task, "Dev1/ai0"; terminal_config=RSE)

@@ -1,17 +1,19 @@
-# NIDAQmx.jl
+# DAQmx.jl
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://LidkeLab.github.io/NIDAQmx.jl/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://LidkeLab.github.io/NIDAQmx.jl/dev/)
-[![Build Status](https://github.com/LidkeLab/NIDAQmx.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/LidkeLab/NIDAQmx.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/LidkeLab/NIDAQmx.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/LidkeLab/NIDAQmx.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://LidkeLab.github.io/DAQmx.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://LidkeLab.github.io/DAQmx.jl/dev/)
+[![Build Status](https://github.com/LidkeLab/DAQmx.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/LidkeLab/DAQmx.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/LidkeLab/DAQmx.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/LidkeLab/DAQmx.jl)
 
-A Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe access to NI data acquisition hardware.
+A Julia wrapper for the NI-DAQmx driver, providing type-safe access to NI data acquisition hardware.
+
+NI-DAQmx is a trademark of National Instruments. This project is not affiliated with or endorsed by National Instruments.
 
 ## Installation
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/LidkeLab/NIDAQmx.jl")
+Pkg.add("DAQmx")
 ```
 
 Requires NI-DAQmx driver to be installed on your system.
@@ -19,7 +21,7 @@ Requires NI-DAQmx driver to be installed on your system.
 ## Quick Start
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # List available devices
 devs = devices()
@@ -48,7 +50,7 @@ write(task, sin.(2π .* (0:99) ./ 100))
 ## Documentation
 
 - [API Reference](api_overview.md) - Complete function and type documentation
-- [Full Documentation](https://LidkeLab.github.io/NIDAQmx.jl/dev/) - Guides and examples
+- [Full Documentation](https://LidkeLab.github.io/DAQmx.jl/dev/) - Guides and examples
 
 ## License
 

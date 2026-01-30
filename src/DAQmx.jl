@@ -1,15 +1,18 @@
 """
-    NIDAQmx
+    DAQmx
 
-A Julia wrapper for National Instruments NI-DAQmx driver.
+A Julia wrapper for the NI-DAQmx driver.
 
 This package provides a clean, type-safe interface to NI data acquisition hardware.
 It uses parametric types for task types and explicit error handling.
 
+NI-DAQmx is a trademark of National Instruments. This project is not affiliated
+with or endorsed by National Instruments.
+
 # Basic Usage
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # List available devices
 devs = devices()
@@ -38,7 +41,7 @@ counts = read(task)
 
 See the documentation for more detailed usage examples.
 """
-module NIDAQmx
+module DAQmx
 
 using Base: unsafe_string
 
@@ -162,10 +165,10 @@ export property_info, get_all_channel_properties
 
 # Library information
 export library_version, is_library_available, cached_library_version
-export NIDAQmxVersion
+export DAQmxVersion
 
 # Error handling
-export NIDAQError, NIDAQWarning
+export DAQmxError, DAQmxWarning
 export check_error, get_error_message, get_extended_error_info
 
 # ============================================================================
@@ -176,4 +179,4 @@ function __init__()
     __init_library__()
 end
 
-end # module NIDAQmx
+end # module DAQmx

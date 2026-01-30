@@ -14,7 +14,7 @@
 using Pkg
 Pkg.activate(joinpath(@__DIR__, "..", ".."))
 
-using NIDAQmx
+using DAQmx
 using Printf
 
 # Configuration

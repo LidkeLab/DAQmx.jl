@@ -1,8 +1,8 @@
 ```@meta
-CurrentModule = NIDAQmx
+CurrentModule = DAQmx
 ```
 
-# NIDAQmx.jl
+# DAQmx.jl
 
 A Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe access to NI data acquisition hardware.
 
@@ -19,7 +19,7 @@ A Julia wrapper for National Instruments NI-DAQmx driver, providing type-safe ac
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/LidkeLab/NIDAQmx.jl")
+Pkg.add(url="https://github.com/LidkeLab/DAQmx.jl")
 ```
 
 Requires NI-DAQmx driver to be installed on your system.
@@ -27,7 +27,7 @@ Requires NI-DAQmx driver to be installed on your system.
 ## Quick Start
 
 ```julia
-using NIDAQmx
+using DAQmx
 
 # List available devices
 devs = devices()
@@ -46,7 +46,7 @@ write(task, sin.(2π .* (0:99) ./ 100))
 
 ## Task Types
 
-NIDAQmx.jl uses parametric types to enable type-safe dispatch:
+DAQmx.jl uses parametric types to enable type-safe dispatch:
 
 | Type Alias | Task Kind | Use |
 |------------|-----------|-----|

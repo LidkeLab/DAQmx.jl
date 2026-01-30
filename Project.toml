@@ -1,4 +1,4 @@
-name = "NIDAQmx"
+name = "DAQmx"
 uuid = "bc903ccc-f951-4f60-9748-ff64248ad6aa"
 authors = ["klidke@unm.edu"]
 version = "0.1.0"

@@ -1,4 +1,4 @@
-# NIDAQmx Development Scripts
+# DAQmx Development Scripts
 
 Scripts for testing and debugging NI-DAQmx hardware.
 

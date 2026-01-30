@@ -1,16 +1,16 @@
-# Mock-based tests for NIDAQmx.jl
+# Mock-based tests for DAQmx.jl
 #
 # These tests run without NI hardware by mocking the low-level ccall functions.
 # This allows testing of the Julia wrapper code in CI environments.
 
 using Test
-using NIDAQmx
+using DAQmx
 
 # ============================================================================
 # Mock Infrastructure
 # ============================================================================
 
-module MockNIDAQmx
+module MockDAQmx
     # Mock task handle storage
     mutable struct MockTaskState
         handle_counter::Int
@@ -76,7 +76,7 @@ end
 
 @testset "Type Definitions" begin
     @testset "Bool32" begin
-        using NIDAQmx: Bool32, bool32
+        using DAQmx: Bool32, bool32
 
         @test Bool32(true) !== nothing
         @test Bool32(false) !== nothing
@@ -87,11 +87,11 @@ end
     end
 
     @testset "Task Types" begin
-        using NIDAQmx: Task, AITask, AOTask, DITask, DOTask, CITask, COTask
-        using NIDAQmx: AnalogInputKind, AnalogOutputKind
-        using NIDAQmx: DigitalInputKind, DigitalOutputKind
-        using NIDAQmx: CounterInputKind, CounterOutputKind
-        using NIDAQmx: task_kind
+        using DAQmx: Task, AITask, AOTask, DITask, DOTask, CITask, COTask
+        using DAQmx: AnalogInputKind, AnalogOutputKind
+        using DAQmx: DigitalInputKind, DigitalOutputKind
+        using DAQmx: CounterInputKind, CounterOutputKind
+        using DAQmx: task_kind
 
         # Test type aliases are defined correctly
         @test AITask === Task{AnalogInputKind}
@@ -103,13 +103,13 @@ end
     end
 
     @testset "Enumerations" begin
-        using NIDAQmx: TerminalConfig, RSE, NRSE, Differential, PseudoDifferential
-        using NIDAQmx: Edge, Rising, Falling
-        using NIDAQmx: SampleMode, FiniteSamples, ContinuousSamples
-        using NIDAQmx: FillMode, GroupByChannel, GroupByScanNumber
-        using NIDAQmx: LineGrouping, ChannelPerLine, ChannelForAllLines
-        using NIDAQmx: CountDirection, CountUp, CountDown
-        using NIDAQmx: Level, Low, High
+        using DAQmx: TerminalConfig, RSE, NRSE, Differential, PseudoDifferential
+        using DAQmx: Edge, Rising, Falling
+        using DAQmx: SampleMode, FiniteSamples, ContinuousSamples
+        using DAQmx: FillMode, GroupByChannel, GroupByScanNumber
+        using DAQmx: LineGrouping, ChannelPerLine, ChannelForAllLines
+        using DAQmx: CountDirection, CountUp, CountDown
+        using DAQmx: Level, Low, High
 
         # Test enum values are defined
         @test Int32(RSE) != 0
@@ -122,7 +122,7 @@ end
     end
 
     @testset "Channel Types" begin
-        using NIDAQmx: AbstractChannel, AnalogChannel, DigitalChannel, CounterChannel
+        using DAQmx: AbstractChannel, AnalogChannel, DigitalChannel, CounterChannel
 
         # Test channel constructors
         ac = AnalogChannel("Dev1/ai0")
@@ -145,17 +145,17 @@ end
 # ============================================================================
 
 @testset "Error Handling" begin
-    using NIDAQmx: NIDAQError, NIDAQWarning, check_error
+    using DAQmx: DAQmxError, DAQmxWarning, check_error
 
-    @testset "NIDAQError" begin
-        err = NIDAQError(Int32(-200001), "Test error message")
+    @testset "DAQmxError" begin
+        err = DAQmxError(Int32(-200001), "Test error message")
         @test err.code == -200001
         @test err.message == "Test error message"
         @test err isa Exception
     end
 
-    @testset "NIDAQWarning" begin
-        warn = NIDAQWarning(Int32(1), "Test warning message")
+    @testset "DAQmxWarning" begin
+        warn = DAQmxWarning(Int32(1), "Test warning message")
         @test warn.code == 1
         @test warn.message == "Test warning message"
     end
@@ -165,7 +165,7 @@ end
         @test check_error(Int32(0)) === nothing
 
         # Error case should throw
-        @test_throws NIDAQError check_error(Int32(-1))
+        @test_throws DAQmxError check_error(Int32(-1))
     end
 end
 
@@ -174,7 +174,7 @@ end
 # ============================================================================
 
 @testset "Device Types" begin
-    using NIDAQmx: Device
+    using DAQmx: Device
 
     dev = Device("Dev1")
     @test dev.name == "Dev1"
@@ -190,9 +190,9 @@ end
 # ============================================================================
 
 @testset "Property System" begin
-    using NIDAQmx: PropertyDef, CHANNEL_PROPERTIES, TASK_PROPERTIES
-    using NIDAQmx: list_channel_properties, list_task_properties
-    using NIDAQmx: property_info, is_settable
+    using DAQmx: PropertyDef, CHANNEL_PROPERTIES, TASK_PROPERTIES
+    using DAQmx: list_channel_properties, list_task_properties
+    using DAQmx: property_info, is_settable
 
     @testset "PropertyDef" begin
         prop = PropertyDef(:DAQmxGetAIMax, :DAQmxSetAIMax, Float64, "Maximum value")
@@ -235,20 +235,20 @@ end
 # ============================================================================
 
 @testset "Library Functions" begin
-    using NIDAQmx: is_library_available, NIDAQmxVersion
+    using DAQmx: is_library_available, DAQmxVersion
 
     # These tests only check the function exists and returns the right type
     @test is_library_available() isa Bool
 
     # Test version struct
-    v = NIDAQmxVersion(23, 5, 0)
+    v = DAQmxVersion(23, 5, 0)
     @test v.major == 23
     @test v.minor == 5
     @test v.update == 0
 
     io = IOBuffer()
     show(io, v)
-    @test String(take!(io)) == "NIDAQmx v23.5.0"
+    @test String(take!(io)) == "NI-DAQmx v23.5.0"
 
     @test VersionNumber(v) == v"23.5.0"
 end
@@ -258,10 +258,10 @@ end
 # ============================================================================
 
 @testset "Constants" begin
-    using NIDAQmx: DAQmx_Val_Rising, DAQmx_Val_Falling
-    using NIDAQmx: DAQmx_Val_Volts, DAQmx_Val_Amps
-    using NIDAQmx: DAQmx_Val_FiniteSamps, DAQmx_Val_ContSamps
-    using NIDAQmx: DAQmx_Val_RSE, DAQmx_Val_NRSE, DAQmx_Val_Diff
+    using DAQmx: DAQmx_Val_Rising, DAQmx_Val_Falling
+    using DAQmx: DAQmx_Val_Volts, DAQmx_Val_Amps
+    using DAQmx: DAQmx_Val_FiniteSamps, DAQmx_Val_ContSamps
+    using DAQmx: DAQmx_Val_RSE, DAQmx_Val_NRSE, DAQmx_Val_Diff
 
     # Test that constants have expected values
     @test DAQmx_Val_Rising == 10280
@@ -283,16 +283,16 @@ end
     @testset "Chaining Pattern" begin
         # Test that functions return task for chaining
         # (This would require mocking, but we verify the pattern exists)
-        using NIDAQmx: configure_timing!, configure_implicit_timing!
+        using DAQmx: configure_timing!, configure_implicit_timing!
 
         # These are the function signatures we expect
-        @test hasmethod(configure_timing!, Tuple{NIDAQmx.Task})
-        @test hasmethod(configure_implicit_timing!, Tuple{NIDAQmx.Task})
+        @test hasmethod(configure_timing!, Tuple{DAQmx.Task})
+        @test hasmethod(configure_implicit_timing!, Tuple{DAQmx.Task})
     end
 
     @testset "Export Completeness" begin
         # Verify key exports are available
-        exports = names(NIDAQmx)
+        exports = names(DAQmx)
 
         # Task types
         @test :AITask in exports
