@@ -206,8 +206,8 @@ is_library_available
 ## Error Handling
 
 ```@docs
-NIDAQError
-NIDAQWarning
+DAQmxError
+DAQmxWarning
 check_error
 get_error_message
 get_extended_error_info
