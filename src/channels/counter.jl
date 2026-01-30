@@ -1,4 +1,4 @@
-# Counter channel functions for NIDAQmx.jl
+# Counter channel functions for DAQmx.jl
 
 """
     add_ci_count_edges!(task::CITask, counter::String;

@@ -1,4 +1,4 @@
-# Auto-generated function bindings for NIDAQmx
+# Auto-generated function bindings for NI-DAQmx
 # Do not edit manually - regenerate using gen/generator.jl
 
 # Task management

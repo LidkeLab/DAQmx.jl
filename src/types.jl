@@ -1,4 +1,4 @@
-# Type definitions for NIDAQmx.jl
+# Type definitions for DAQmx.jl
 
 # ============================================================================
 # Task Types - Using parametric types instead of @eval loops
@@ -21,11 +21,11 @@ struct CounterOutputKind <: TaskKind end
 """
     Task{K<:TaskKind}
 
-A NIDAQmx task with parametric type for the task kind.
+An NI-DAQmx task with parametric type for the task kind.
 This allows for type-safe dispatch on different task types.
 
 # Fields
-- `handle::TaskHandle`: The underlying NIDAQmx task handle.
+- `handle::TaskHandle`: The underlying NI-DAQmx task handle.
 - `name::String`: The name of the task.
 
 # Type Aliases
@@ -85,7 +85,7 @@ end
 """
     create_task(name::String="") -> TaskHandle
 
-Create a new NIDAQmx task and return its handle.
+Create a new NI-DAQmx task and return its handle.
 """
 function create_task(name::String="")
     handle_ref = Ref{TaskHandle}(C_NULL)
@@ -341,7 +341,7 @@ end
 """
     task_handle(task::Task) -> TaskHandle
 
-Get the underlying NIDAQmx handle for a task.
+Get the underlying NI-DAQmx handle for a task.
 """
 task_handle(task::Task) = task.handle
 

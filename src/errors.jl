@@ -1,7 +1,7 @@
-# Error handling for NIDAQmx
+# Error handling for DAQmx.jl
 
 # Helper functions for pointer type conversions
-# NIDAQmx generated functions expect Ptr{Cchar} for strings
+# NI-DAQmx generated functions expect Ptr{Cchar} for strings
 _cstr(s::String) = Ptr{Cchar}(pointer(s))
 const NULLSTR = Ptr{Cchar}()
 
@@ -45,7 +45,7 @@ end
 """
     get_error_message(code::Int32) -> String
 
-Retrieve the error message string for a given NIDAQmx error or warning code.
+Retrieve the error message string for a given NI-DAQmx error or warning code.
 """
 function get_error_message(code::Int32)
     # First call to get buffer size
@@ -82,14 +82,14 @@ end
 """
     check_error(code::Int32)
 
-Check a NIDAQmx return code and handle errors/warnings appropriately.
+Check an NI-DAQmx return code and handle errors/warnings appropriately.
 
 - If `code == 0`: Success, returns `nothing`.
 - If `code > 0`: Warning, logs a warning message and returns `nothing`.
-- If `code < 0`: Error, throws a `NIDAQError` exception.
+- If `code < 0`: Error, throws a `DAQmxError` exception.
 
 # Arguments
-- `code::Int32`: The return code from a NIDAQmx function.
+- `code::Int32`: The return code from an NI-DAQmx function.
 
 # Throws
 - `DAQmxError`: If `code < 0`.
@@ -117,7 +117,7 @@ end
 """
     @check expr
 
-Macro to check the return code of a NIDAQmx function call.
+Macro to check the return code of an NI-DAQmx function call.
 
 # Example
 ```julia

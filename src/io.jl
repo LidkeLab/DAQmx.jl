@@ -1,4 +1,4 @@
-# Read/Write operations for NIDAQmx.jl
+# Read/Write operations for DAQmx.jl
 
 # ============================================================================
 # Analog Input Read

@@ -1,4 +1,4 @@
-# Analog channel functions for NIDAQmx.jl
+# Analog channel functions for DAQmx.jl
 
 """
     add_ai_voltage!(task::AITask, channel::String;

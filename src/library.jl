@@ -1,9 +1,9 @@
-# Library loading and version detection for NIDAQmx
+# Library loading and version detection for DAQmx.jl
 
 """
     libnidaq
 
-The path to the NIDAQmx shared library. Automatically detected based on the operating system.
+The path to the NI-DAQmx shared library. Automatically detected based on the operating system.
 """
 const libnidaq = if Sys.iswindows()
     "nicaiu.dll"
@@ -16,7 +16,7 @@ end
 """
     DAQmxVersion
 
-Holds the version information for the NIDAQmx driver.
+Holds the version information for the NI-DAQmx driver.
 """
 struct DAQmxVersion
     major::UInt32
@@ -33,10 +33,10 @@ Base.VersionNumber(v::DAQmxVersion) = VersionNumber(v.major, v.minor, v.update)
 """
     library_version() -> DAQmxVersion
 
-Query the installed NIDAQmx driver version.
+Query the installed NI-DAQmx driver version.
 
 # Returns
-- `DAQmxVersion`: The version of the installed NIDAQmx driver.
+- `DAQmxVersion`: The version of the installed NI-DAQmx driver.
 
 # Throws
 - `NIDAQError`: If the version cannot be determined.
@@ -44,7 +44,7 @@ Query the installed NIDAQmx driver version.
 # Example
 ```julia
 julia> v = library_version()
-NIDAQmx v23.5.0
+NI-DAQmx v23.5.0
 
 julia> VersionNumber(v)
 v"23.5.0"
@@ -65,7 +65,7 @@ end
 """
     is_library_available() -> Bool
 
-Check if the NIDAQmx library is available on the system.
+Check if the NI-DAQmx library is available on the system.
 
 # Returns
 - `true` if the library can be loaded, `false` otherwise.

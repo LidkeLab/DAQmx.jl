@@ -1,4 +1,4 @@
-# Auto-generated constants for NIDAQmx
+# Auto-generated constants for NI-DAQmx
 # Do not edit manually - regenerate using gen/generator.jl
 
 # Buffer properties

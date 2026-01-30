@@ -1,4 +1,4 @@
-# Type-safe property system for NIDAQmx.jl
+# Type-safe property system for DAQmx.jl
 
 # ============================================================================
 # Property Metadata Definition
@@ -7,7 +7,7 @@
 """
     PropertyDef
 
-Defines metadata for a NIDAQmx property including getter/setter functions and type.
+Defines metadata for an NI-DAQmx property including getter/setter functions and type.
 """
 struct PropertyDef
     getter::Symbol
@@ -99,7 +99,7 @@ end
     measurement_type(task::Task, channel::String) -> Int32
 
 Get the measurement or output type for a channel.
-Returns the NIDAQmx constant value.
+Returns the NI-DAQmx constant value.
 """
 function measurement_type(task::Task, channel::String)
     ctype = channel_type(task, channel)
@@ -141,7 +141,7 @@ function get_channel_property(task::Task, channel::String, property::Symbol)
     end
 
     prop_def = CHANNEL_PROPERTIES[property]
-    getter = getfield(NIDAQmx, prop_def.getter)
+    getter = getfield(DAQmx, prop_def.getter)
 
     val = Ref{prop_def.value_type}(zero(prop_def.value_type))
     @check getter(task.handle, _cstr(channel), val)
@@ -170,7 +170,7 @@ function set_channel_property!(task::Task, channel::String, property::Symbol, va
         throw(ArgumentError("Property $property is read-only"))
     end
 
-    setter = getfield(NIDAQmx, prop_def.setter)
+    setter = getfield(DAQmx, prop_def.setter)
     @check setter(task.handle, _cstr(channel), convert(prop_def.value_type, value))
     return nothing
 end
@@ -186,7 +186,7 @@ function get_task_property(task::Task, property::Symbol)
     end
 
     prop_def = TASK_PROPERTIES[property]
-    getter = getfield(NIDAQmx, prop_def.getter)
+    getter = getfield(DAQmx, prop_def.getter)
 
     val = Ref{prop_def.value_type}(zero(prop_def.value_type))
     @check getter(task.handle, val)
@@ -209,7 +209,7 @@ function set_task_property!(task::Task, property::Symbol, value)
         throw(ArgumentError("Property $property is read-only"))
     end
 
-    setter = getfield(NIDAQmx, prop_def.setter)
+    setter = getfield(DAQmx, prop_def.setter)
     @check setter(task.handle, convert(prop_def.value_type, value))
     return nothing
 end

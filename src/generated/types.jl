@@ -1,7 +1,7 @@
-# Auto-generated type definitions for NIDAQmx
+# Auto-generated type definitions for NI-DAQmx
 # Do not edit manually - regenerate using gen/generator.jl
 
-# Basic numeric type aliases matching NIDAQmx C types
+# Basic numeric type aliases matching NI-DAQmx C types
 const int8 = Int8
 const uInt8 = Cuchar
 const int16 = Cshort
@@ -13,7 +13,7 @@ const float64 = Cdouble
 const int64 = Clonglong
 const uInt64 = Culonglong
 
-# String type for NIDAQmx (varies by platform)
+# String type for NI-DAQmx (varies by platform)
 const dType = Cchar
 
 # Bool32 as a proper Julia type

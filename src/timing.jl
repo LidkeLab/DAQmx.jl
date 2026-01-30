@@ -1,4 +1,4 @@
-# Timing configuration for NIDAQmx.jl
+# Timing configuration for DAQmx.jl
 
 """
     configure_timing!(task::Task;

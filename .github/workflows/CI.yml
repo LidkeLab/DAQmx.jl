@@ -67,6 +67,6 @@ jobs:
         shell: julia --project=docs --color=yes {0}
         run: |
           using Documenter: DocMeta, doctest
-          using NIDAQmx
-          DocMeta.setdocmeta!(NIDAQmx, :DocTestSetup, :(using NIDAQmx); recursive=true)
-          doctest(NIDAQmx)
+          using DAQmx
+          DocMeta.setdocmeta!(DAQmx, :DocTestSetup, :(using DAQmx); recursive=true)
+          doctest(DAQmx)

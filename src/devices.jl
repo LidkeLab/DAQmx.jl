@@ -1,4 +1,4 @@
-# Device enumeration and information for NIDAQmx.jl
+# Device enumeration and information for DAQmx.jl
 
 """
     Device
@@ -19,7 +19,7 @@ end
 """
     devices() -> Vector{Device}
 
-Get a list of all available NIDAQmx devices.
+Get a list of all available NI-DAQmx devices.
 
 # Returns
 - A vector of `Device` objects representing available devices.

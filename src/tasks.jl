@@ -1,4 +1,4 @@
-# Task lifecycle management for NIDAQmx.jl
+# Task lifecycle management for DAQmx.jl
 
 """
     start!(task::Task)

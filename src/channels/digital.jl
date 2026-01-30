@@ -1,4 +1,4 @@
-# Digital channel functions for NIDAQmx.jl
+# Digital channel functions for DAQmx.jl
 
 """
     add_di_chan!(task::DITask, lines::String;
