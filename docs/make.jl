@@ -11,10 +11,14 @@ makedocs(;
         canonical="https://LidkeLab.github.io/NIDAQmx.jl",
         edit_link="main",
         assets=String[],
+        prettyurls=get(ENV, "CI", "false") == "true",
     ),
     pages=[
         "Home" => "index.md",
+        "Examples" => "examples.md",
+        "API" => "api.md",
     ],
+    warnonly=[:missing_docs, :cross_references],
 )
 
 deploydocs(;
