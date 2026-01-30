@@ -97,7 +97,12 @@ Check a NIDAQmx return code and handle errors/warnings appropriately.
 function check_error(code::Int32)
     code == 0 && return nothing
 
-    message = get_error_message(code)
+    # Try to get error message, fall back to generic message if library unavailable
+    message = try
+        get_error_message(code)
+    catch
+        "NIDAQmx error (code: $code)"
+    end
 
     if code > 0
         # Warning - log and continue
