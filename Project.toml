@@ -1,7 +1,7 @@
 name = "NIDAQmx"
 uuid = "bc903ccc-f951-4f60-9748-ff64248ad6aa"
 authors = ["klidke@unm.edu"]
-version = "1.0.0-DEV"
+version = "0.1.0"
 
 [compat]
 julia = "1.10"
